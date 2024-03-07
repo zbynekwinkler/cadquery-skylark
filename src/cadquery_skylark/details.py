@@ -60,6 +60,6 @@ def corner() -> cq.Sketch:
 
 def middle_hole() -> cq.Sketch:
     s = cq.Sketch()
-    s.slot(100 + 2 * 9, 18)
-    s.push([(0, -100), (0, 100)]).face(t_slot(120, 30), angle=90).reset()
+    s.face(t_slot(120, 30), angle=90)
+    s.push([(0, -100), (0, 100)]).slot(100 + 2 * 9, 18).reset()
     return s
