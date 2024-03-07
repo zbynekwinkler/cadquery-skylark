@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: GitHub Discussions For This Project
+    url: https://github.com/zwn/cadquery-skylark/discussions
+    about: Please ask and answer questions about this codebase here.
+  - name: Wikihouse Community Forum
+    url: https://community.wikihouse.cc/
+    about: Questions about wikihouse and/or skylark go here.
