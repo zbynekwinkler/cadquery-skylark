@@ -1,0 +1,13 @@
+[project]
+authors = [
+  {name = "Zbyněk Winkler", email = "zbynek.winkler@gmail.com"},
+]
+name = "cadquery-skylark"
+version = "0.0.1"
+
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools", "wheel"]
+
+#[tool.setuptools]
+#packages = ["src/cadquery_skylark"]
