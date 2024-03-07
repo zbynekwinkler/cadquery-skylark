@@ -63,3 +63,20 @@ def middle_hole() -> cq.Sketch:
     s.face(t_slot(120, 30), angle=90)
     s.push([(0, -100), (0, 100)]).slot(100 + 2 * 9, 18).reset()
     return s
+
+
+def bowtie_handle():
+    w = cq.Workplane("XY")
+    w = w.moveTo(-21, 50).vLine(6).radiusArc((21, 56), 21).vLine(-6).close()
+    wire = w.wires().val()
+    s = cq.Sketch()
+    s.face(wire)
+    s.face(wire, angle=180)
+    return s
+
+
+def bowtie_handle_pair():
+    s = cq.Sketch()
+    bth = bowtie_handle()
+    s.push(((0, 104.5), (0, -104.0))).face(bth, angle=90).reset()
+    return s
