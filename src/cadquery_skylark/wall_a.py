@@ -77,3 +77,15 @@ def half_depth(width: mm, height: mm) -> cq.Sketch:
     half.face(slot_trim).face(corner_trim)
 
     return half
+
+
+def make_part(width: mm, height: mm) -> cq.Workplane:
+    outside_s = outside(width, height)
+    inside_s = inside(height)
+    half_s = half_depth(width, height)
+
+    p = cq.Workplane("XY").placeSketch(outside_s).extrude(18)
+    p = p.faces(">Z").placeSketch(inside_s).cutThruAll()
+    p = p.faces(">Z").placeSketch(half_s).cutBlind(-18 / 2)
+
+    return p

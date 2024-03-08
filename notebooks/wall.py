@@ -41,26 +41,19 @@ show(details.bowtie_handle_pair())
 
 # %%
 height, width = 2400, 600
-outside = wall_a.outside(width, height)
-inside = wall_a.inside(height)
-half = wall_a.half_depth(width, height)
-
-p = cq.Workplane("XY").placeSketch(outside).extrude(18)
-p = p.faces(">Z").placeSketch(inside).cutThruAll()
-p = p.faces(">Z").placeSketch(half).cutBlind(-18/2)
-
+p = wall_a.make_part(width, height)
 #cq.exporters.export(p, "SKYLARK250_WALL-M-face.step", opt={"write_pcurves": False})
 
-show(p, half)
+show(p)
 
 # %%
 # https://cadquery.readthedocs.io/en/latest/classreference.html#cadquery.occ_impl.exporters.dxf.DxfDocument
 
 from cadquery.occ_impl.exporters.dxf import DxfDocument
 dxf = DxfDocument()
-blue = outside.copy().wires().offset(-0.25, mode='i').reset().clean()
-cyan = inside.copy().wires().offset(0.25, mode='a').reset().clean()
-green = half.copy().wires().offset(0.25, mode='a').reset().clean()
+blue = wall_a.outside(width, height).wires().offset(-0.25, mode='i').reset().clean()
+cyan = wall_a.inside(height).wires().offset(0.25, mode='a').reset().clean()
+green = wall_a.half_depth(width, height).wires().offset(0.25, mode='a').reset().clean()
 blue_w = cq.Workplane("XY").add(blue.faces().vals())
 cyan_w = cq.Workplane("XY").add(cyan.faces().vals())
 green_w = cq.Workplane("XY").add(green.faces().vals())
