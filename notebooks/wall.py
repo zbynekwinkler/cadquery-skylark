@@ -42,13 +42,7 @@ show(details.bowtie_handle_pair())
 # %%
 height, width = 2400, 600
 outside = wall_a.outside(width, height)
-
-def middle_hole_points():
-    for y in range(-height//2 + 600, height//2, 600):
-        yield 0, y
-
-inside = cq.Sketch()
-inside.push(middle_hole_points()).face(details.middle_hole()).reset()
+inside = wall_a.inside(height)
 
 half = cq.Sketch()
 half.push(wall_a._bowtie_pair_points(width, height)).face(details.bowtie_handle_pair()).reset()

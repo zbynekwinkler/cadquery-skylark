@@ -42,3 +42,14 @@ def outside(width, height) -> cq.Sketch:
     sketch.push(_corner_points(width, height)).face(details.corner(), mode="s").reset()
 
     return sketch
+
+
+def _middle_hole_points(height):
+    for y in range(-height // 2 + 600, height // 2, 600):
+        yield 0, y
+
+
+def inside(height) -> cq.Sketch:
+    sketch = cq.Sketch()
+    sketch.push(_middle_hole_points(height)).face(details.middle_hole()).reset()
+    return sketch
