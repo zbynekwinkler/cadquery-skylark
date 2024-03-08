@@ -3,31 +3,34 @@ import cadquery as cq
 from . import details
 
 
-def _bowtie_pair_points(width, height):
+mm = int
+
+
+def _bowtie_pair_points(width: mm, height: mm):
     for x in (-width / 2, width / 2):
         for y in range(-height // 2 + 300, height // 2, 600):
             yield x, y
 
 
-def _slot_pairs_points(width, height):
+def _slot_pairs_points(width: mm, height: mm):
     for x in (-width / 2, width / 2):
         for y in range(-height // 2 + 600, height // 2, 600):
             yield x, y
 
 
-def _top_and_bottom_bowtie_points(height):
+def _top_and_bottom_bowtie_points(height: mm):
     for x in (-194.9, 0, 194.9):
         for y in (-height / 2, height / 2):
             yield x, y
 
 
-def _corner_points(width, height, dx=0, dy=0):
+def _corner_points(width: mm, height: mm, dx: mm = 0, dy: mm = 0):
     for x in (-(width / 2 - dx), width / 2 - dx):
         for y in (-(height / 2 - dy), height / 2 - dy):
             yield x, y
 
 
-def outside(width, height) -> cq.Sketch:
+def outside(width: mm, height: mm) -> cq.Sketch:
     sketch = cq.Sketch().rect(width, height)
 
     sketch.push(_bowtie_pair_points(width, height))
@@ -44,12 +47,33 @@ def outside(width, height) -> cq.Sketch:
     return sketch
 
 
-def _middle_hole_points(height):
+def _middle_hole_points(height: mm):
     for y in range(-height // 2 + 600, height // 2, 600):
         yield 0, y
 
 
-def inside(height) -> cq.Sketch:
+def inside(height: mm) -> cq.Sketch:
     sketch = cq.Sketch()
     sketch.push(_middle_hole_points(height)).face(details.middle_hole()).reset()
     return sketch
+
+
+def half_depth(width: mm, height: mm) -> cq.Sketch:
+    half = cq.Sketch()
+    half.push(_bowtie_pair_points(width, height)).face(details.bowtie_handle_pair()).reset()
+    half.push(_top_and_bottom_bowtie_points(height)).face(details.bowtie_handle()).reset()
+    half.rect(width, height, mode="i")
+
+    slot_trim = cq.Sketch()
+    slot_trim.push(_slot_pairs_points(width, height)).rect(18 * 2, 62).reset()
+    slot_trim.rect(width, height, mode="i")
+    slot_trim.vertices().fillet(6).reset()
+
+    corner_trim = cq.Sketch()
+    corner_trim.push(_corner_points(width, height, dy=52.5)).rect(18 * 2, 37).reset()
+    corner_trim.rect(width, height, mode="i")
+    corner_trim.vertices().fillet(6).reset()
+
+    half.face(slot_trim).face(corner_trim)
+
+    return half

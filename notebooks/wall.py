@@ -43,23 +43,7 @@ show(details.bowtie_handle_pair())
 height, width = 2400, 600
 outside = wall_a.outside(width, height)
 inside = wall_a.inside(height)
-
-half = cq.Sketch()
-half.push(wall_a._bowtie_pair_points(width, height)).face(details.bowtie_handle_pair()).reset()
-half.push(wall_a._top_and_bottom_bowtie_points(height)).face(details.bowtie_handle()).reset()
-half.rect(width, height, mode='i')
-
-slot_trim = cq.Sketch()
-slot_trim.push(wall_a._slot_pairs_points(width, height)).rect(18*2, 62).reset()
-slot_trim.rect(width, height, mode="i")
-slot_trim.vertices().fillet(6).reset()
-
-corner_trim = cq.Sketch()
-corner_trim.push(wall_a._corner_points(width, height, dy=52.5)).rect(18*2, 37).reset()
-corner_trim.rect(width, height, mode="i")
-corner_trim.vertices().fillet(6).reset()
-
-half.face(slot_trim).face(corner_trim)
+half = wall_a.half_depth(width, height)
 
 p = cq.Workplane("XY").placeSketch(outside).extrude(18)
 p = p.faces(">Z").placeSketch(inside).cutThruAll()
@@ -67,7 +51,7 @@ p = p.faces(">Z").placeSketch(half).cutBlind(-18/2)
 
 #cq.exporters.export(p, "SKYLARK250_WALL-M-face.step", opt={"write_pcurves": False})
 
-show(p, slot_trim, corner_trim)
+show(p, half)
 
 # %%
 # https://cadquery.readthedocs.io/en/latest/classreference.html#cadquery.occ_impl.exporters.dxf.DxfDocument
