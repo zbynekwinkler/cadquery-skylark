@@ -42,7 +42,7 @@ show(details.bowtie_handle_pair())
 # %%
 height, width = 2400, 600
 p = wall_a.make_part(width, height)
-#cq.exporters.export(p, "SKYLARK250_WALL-M-face.step", opt={"write_pcurves": False})
+cq.exporters.export(p, "SKYLARK250_WALL-M-A.step", opt={"write_pcurves": False})
 
 show(p)
 
@@ -50,4 +50,4 @@ show(p)
 
 blue_w, cyan_w, green_w = wall_a.make_cnc(width, height, '.')
 
-show(p, blue_w, cyan_w, green_w, names=["part", "blue", "cyan", "green"])
+show(p, blue_w, cyan_w, green_w, names=["part", "blue", "cyan", "green"], colors=["goldenrod", "blue", "cyan", "green"])
