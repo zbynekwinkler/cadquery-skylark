@@ -9,7 +9,7 @@ set_defaults(reset_camera=Camera.KEEP, axes=True, collapse=Collapse.LEAVES, grid
 %aimport -cadquery
 
 # %%
-from cadquery_skylark import details, wall_a
+from cadquery_skylark import details, wall_a, wall_d
 
 
 # %%
@@ -49,5 +49,15 @@ show(p)
 # %%
 
 blue_w, cyan_w, green_w = wall_a.make_cnc(width, height, '.')
+
+show(p, blue_w, cyan_w, green_w, names=["part", "blue", "cyan", "green"], colors=["goldenrod", "blue", "cyan", "green"])
+
+
+# %%
+p = wall_d.make_part(width, height)
+show(p)
+
+# %%
+blue_w, cyan_w, green_w = wall_d.make_cnc(width, height, '.')
 
 show(p, blue_w, cyan_w, green_w, names=["part", "blue", "cyan", "green"], colors=["goldenrod", "blue", "cyan", "green"])
