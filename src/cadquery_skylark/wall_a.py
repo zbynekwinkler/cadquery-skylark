@@ -45,9 +45,10 @@ def outside(width: mm, height: mm) -> cq.Sketch:
     sketch.push(_top_and_bottom_bowtie_points(height))
     sketch.face(details.bowtie(), mode="s")
 
-    sketch.push(_corner_points(width, height)).face(details.corner(), mode="s").reset()
+    sketch.push(_corner_points(width, height))
+    sketch.face(details.corner(), mode="s")
 
-    return sketch
+    return sketch.reset()
 
 
 def _middle_hole_points(height: mm):
@@ -57,29 +58,40 @@ def _middle_hole_points(height: mm):
 
 def inside(height: mm) -> cq.Sketch:
     sketch = cq.Sketch()
-    sketch.push(_middle_hole_points(height)).face(details.middle_hole()).reset()
-    return sketch
+    sketch.push(_middle_hole_points(height))
+    sketch.face(details.middle_hole())
+    return sketch.reset()
+
+
+def _bowtie_handles(width: mm, height: mm) -> cq.Sketch:
+    s = cq.Sketch()
+    s.push(_bowtie_pair_points(width, height)).face(details.bowtie_handle_pair())
+    s.push(_top_and_bottom_bowtie_points(height)).face(details.bowtie_handle())
+    s.push([]).rect(width, height, mode="i")
+    return s.reset()
+
+
+def _slot_trim(width: mm, height: mm) -> cq.Sketch:
+    s = cq.Sketch()
+    s.push(_slot_pairs_points(width, height)).rect(18 * 2, 62)
+    s.push([]).rect(width, height, mode="i")
+    s.vertices().fillet(6)
+    return s.reset()
+
+
+def _corner_trim(width: mm, height: mm) -> cq.Sketch:
+    s = cq.Sketch()
+    s.push(_corner_points(width, height, dy=52.5)).rect(18 * 2, 37)
+    s.push([]).rect(width, height, mode="i")
+    s.vertices().fillet(6)
+    return s.reset()
 
 
 def half_depth(width: mm, height: mm) -> cq.Sketch:
-    half = cq.Sketch()
-    half.push(_bowtie_pair_points(width, height)).face(details.bowtie_handle_pair()).reset()
-    half.push(_top_and_bottom_bowtie_points(height)).face(details.bowtie_handle()).reset()
-    half.rect(width, height, mode="i")
-
-    slot_trim = cq.Sketch()
-    slot_trim.push(_slot_pairs_points(width, height)).rect(18 * 2, 62).reset()
-    slot_trim.rect(width, height, mode="i")
-    slot_trim.vertices().fillet(6).reset()
-
-    corner_trim = cq.Sketch()
-    corner_trim.push(_corner_points(width, height, dy=52.5)).rect(18 * 2, 37).reset()
-    corner_trim.rect(width, height, mode="i")
-    corner_trim.vertices().fillet(6).reset()
-
-    half.face(slot_trim).face(corner_trim)
-
-    return half
+    bowtie_handles = _bowtie_handles(width, height)
+    slot_trim = _slot_trim(width, height)
+    corner_trim = _corner_trim(width, height)
+    return cq.Sketch().face(bowtie_handles).face(slot_trim).face(corner_trim)
 
 
 def make_part(width: mm, height: mm) -> cq.Workplane:
