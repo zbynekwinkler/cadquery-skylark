@@ -3,12 +3,7 @@ import cadquery as cq
 
 def bowtie() -> cq.Sketch:
     w = cq.Workplane("XY")
-    w = (
-        w.moveTo(0, 56)
-        .hLine(78 / 2)
-        .radiusArc((78 / 2 + 6, 56 - 6), 6)
-        .lineTo(55 / 2, 0)
-    )
+    w = w.moveTo(0, 56).hLine(78 / 2).radiusArc((78 / 2 + 6, 56 - 6), 6).lineTo(55 / 2, 0)
     w = w.mirrorX().mirrorY()
     s = cq.Sketch().face(w.wires().val())
     to_fillet = cq.selectors.SumSelector(
