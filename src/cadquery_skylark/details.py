@@ -22,7 +22,8 @@ def t_slot(length, width=24 * 2) -> cq.Wire:
     s = cq.Workplane("XY")
     s = s.moveTo(0, length / 2).hLine(width / 2).vLine(-12).hLine(-6).vLineTo(0)
     s = s.mirrorX().mirrorY()
-    return s.wires().val()
+    flipped = s.wires().val().moved(cq.Location((0, 0, 0), (1, 0, 0), 180))
+    return flipped
 
 
 def m_slot() -> cq.Wire:
