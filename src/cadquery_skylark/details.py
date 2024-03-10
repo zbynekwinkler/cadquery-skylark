@@ -25,6 +25,14 @@ def t_slot(length, width=24 * 2) -> cq.Wire:
     return s.wires().val()
 
 
+def m_slot() -> cq.Wire:
+    length = 62
+    s = cq.Workplane("XY")
+    s = s.vLine(length / 2).hLine(12).vLine(-6).hLine(12).vLine(-12).hLine(-6).vLineTo(0)
+    s = s.mirrorX()
+    return s.wires().val()
+
+
 def bowtie_pair() -> cq.Sketch:
     s = cq.Sketch()
     b = bowtie()
