@@ -11,3 +11,6 @@ requires = ["setuptools", "wheel"]
 
 #[tool.setuptools]
 #packages = ["src/cadquery_skylark"]
+
+[tool.ruff]
+line-length = 98
