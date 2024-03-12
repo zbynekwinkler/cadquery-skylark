@@ -1,5 +1,7 @@
 import cadquery as cq
 
+_flip_around_x = cq.Location((0, 0, 0), (1, 0, 0), 180)
+
 
 def bowtie() -> cq.Sketch:
     w = cq.Workplane("XY")
@@ -10,15 +12,14 @@ def bowtie() -> cq.Sketch:
         cq.NearestToPointSelector((25, 0)), cq.NearestToPointSelector((-25, 0))
     )
     s = s.vertices(to_fillet).fillet(6).reset()
-    return s
+    return s.moved(_flip_around_x)
 
 
 def t_slot(length, width=24 * 2) -> cq.Wire:
     s = cq.Workplane("XY")
     s = s.moveTo(0, length / 2).hLine(width / 2).vLine(-12).hLine(-6).vLineTo(0)
     s = s.mirrorX().mirrorY()
-    flipped = s.wires().val().moved(cq.Location((0, 0, 0), (1, 0, 0), 180))
-    return flipped
+    return s.wires().val().moved(_flip_around_x)
 
 
 def m_slot() -> cq.Wire:
@@ -26,7 +27,7 @@ def m_slot() -> cq.Wire:
     s = cq.Workplane("XY")
     s = s.vLine(length / 2).hLine(12).vLine(-6).hLine(12).vLine(-12).hLine(-6).vLineTo(0)
     s = s.mirrorX()
-    return s.wires().val()
+    return s.wires().val().moved(_flip_around_x)
 
 
 def bowtie_pair() -> cq.Sketch:
@@ -65,7 +66,9 @@ def corner() -> cq.Sketch:
 def middle_hole() -> cq.Sketch:
     s = cq.Sketch()
     s.face(t_slot(120, 30), angle=90)
-    s.push([(0, -100), (0, 100)]).slot(100 + 2 * 9, 18).reset()
+    _s = cq.Sketch()
+    _s.push([(0, -100), (0, 100)]).slot(100 + 2 * 9, 18).reset()
+    s.face(_s.moved(_flip_around_x))
     return s
 
 
@@ -76,7 +79,7 @@ def bowtie_handle():
     s = cq.Sketch()
     s.face(wire)
     s.face(wire, angle=180)
-    return s
+    return s.moved(_flip_around_x)
 
 
 def bowtie_handle_pair():
