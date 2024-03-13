@@ -1,7 +1,4 @@
-import pathlib
-
 import cadquery as cq
-from cadquery.occ_impl.exporters import dxf
 
 from . import details
 
@@ -60,28 +57,18 @@ def inside(width: mm, height: mm) -> cq.Sketch:
     return s.reset()
 
 
-def make_part(width: mm, height: mm) -> cq.Sketch:
+def make_part(height: mm) -> cq.Solid:
+    width = 318
     outside_s = outside(width, height)
     inside_s = inside(width, height)
     p = cq.Workplane("XY").placeSketch(outside_s).extrude(18)
     p = p.faces(">Z").workplane(centerOption="CenterOfBoundBox")
     p = p.placeSketch(inside_s).cutThruAll()
-    return p
+    return p.findSolid()
 
 
-def make_cnc(width: mm, height: mm, dirpath):
+def make_cnc(height: mm):
+    width = 318
     blue = outside(width, height).wires().offset(-0.25, mode="i").reset().clean()
     cyan = inside(width, height).wires().offset(0.25, mode="a").reset().clean()
-    blue_w = cq.Workplane("XY").add(blue.faces().vals())
-    cyan_w = cq.Workplane("XY").add(cyan.faces().vals())
-
-    doc = dxf.DxfDocument()
-    doc.add_layer("4_ANYTOOL_CUTTHROUGH_OUTSI", color=5)
-    doc.add_shape(blue_w, "4_ANYTOOL_CUTTHROUGH_OUTSI")
-    doc.add_layer("3_ANYTOOL_CUTTHROUGH_INSID", color=4)
-    doc.add_shape(cyan_w, "3_ANYTOOL_CUTTHROUGH_INSID")
-    doc.add_layer("5_ANYTOOL_HALF_MILL_9MM_IN", color=3)
-    filepath = pathlib.Path(dirpath) / "SKYLARK250_WALL-M-C.dxf"
-    doc.document.saveas(filepath)
-
-    return blue_w, cyan_w
+    return blue, cyan
