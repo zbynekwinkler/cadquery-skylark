@@ -33,6 +33,12 @@ def outside(width, height) -> cq.Sketch:
     s = cq.Sketch().rect(width, height)
     s.push(_slot_pairs_points(width / 2, height)).face(_slot_pair(), mode="s")
     s.push(_slot_pairs_points(-width / 2, height)).face(_slot_pair_service(), mode="s")
+
+    rest = height % 600
+    if rest > 200:
+        s.push([(width / 2, height // 2 - rest / 2)]).face(details.t_slot(100), mode="s")
+        s.push([(-width / 2, height // 2 - rest / 2)]).face(details.t_slot(100, 56 * 2), mode="s")
+
     s.push(_top_and_bottom_slot_point(width, height)).face(details.t_slot(60), angle=90, mode="s")
     return s.reset()
 
