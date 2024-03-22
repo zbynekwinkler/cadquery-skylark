@@ -10,7 +10,7 @@ set_defaults(reset_camera=Camera.KEEP, axes=True, collapse=Collapse.LEAVES, grid
 
 # %%
 import pathlib
-from cadquery_skylark import wall_a, wall_b, wall_c, wall_d
+from cadquery_skylark.wall import wall_a, wall_b, wall_c, wall_d
 
 names = ["part", "blue", "cyan", "green"]
 colors = ["goldenrod", "blue", "cyan", "green"]

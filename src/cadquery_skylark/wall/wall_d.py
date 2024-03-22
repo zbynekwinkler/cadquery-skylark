@@ -1,7 +1,9 @@
 import cadquery as cq
 
-from . import details, wall_a, common
+from .. import details, common
+from . import wall_a
 
+# direct reexport
 from .wall_a import outside as outside
 
 mm = int
