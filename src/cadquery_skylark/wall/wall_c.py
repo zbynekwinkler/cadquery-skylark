@@ -1,6 +1,6 @@
 import cadquery as cq
 
-from . import details, common
+from .. import details, common
 
 mm = int
 

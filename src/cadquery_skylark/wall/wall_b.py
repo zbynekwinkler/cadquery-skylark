@@ -1,6 +1,6 @@
 import cadquery as cq
 
-from cadquery_skylark import details, common
+from .. import details, common
 
 
 def outside(x_len, y_len) -> cq.Sketch:
