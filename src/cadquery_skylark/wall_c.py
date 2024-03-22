@@ -1,6 +1,6 @@
 import cadquery as cq
 
-from . import details
+from . import details, common
 
 mm = int
 
@@ -70,7 +70,7 @@ def make_part(height: mm) -> cq.Solid:
     p = cq.Workplane("XY").placeSketch(outside_s).extrude(18)
     p = p.faces(">Z").workplane(centerOption="CenterOfBoundBox")
     p = p.placeSketch(inside_s).cutThruAll()
-    return p.findSolid()
+    return common.recenter(p.findSolid())
 
 
 def make_cnc(height: mm):

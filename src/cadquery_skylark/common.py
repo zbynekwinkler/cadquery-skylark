@@ -16,3 +16,8 @@ def to_dxf(layers: tuple[cq.Sketch, ...]) -> dxf.DxfDocument:
     doc.add_layer("5_ANYTOOL_HALF_MILL_9MM_IN", color=3)
     doc.add_shape(green_w, "5_ANYTOOL_HALF_MILL_9MM_IN")
     return doc
+
+
+def recenter(shape: cq.Shape):
+    bb = shape.BoundingBox()
+    return shape.translate(-bb.center)

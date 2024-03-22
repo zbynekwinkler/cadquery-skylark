@@ -1,6 +1,6 @@
 import cadquery as cq
 
-from cadquery_skylark import details
+from cadquery_skylark import details, common
 
 
 def outside(x_len, y_len) -> cq.Sketch:
@@ -22,7 +22,7 @@ def make_part() -> cq.Solid:
     x_len, y_len = 600, 250 + 2 * 18
     outline_s = outside(x_len, y_len)
     p = cq.Workplane("XY").placeSketch(outline_s).extrude(18)
-    return p.clean().findSolid()
+    return common.recenter(p.findSolid())
 
 
 def make_cnc():

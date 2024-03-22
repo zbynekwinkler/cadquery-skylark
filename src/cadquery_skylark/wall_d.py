@@ -1,6 +1,6 @@
 import cadquery as cq
 
-from . import details, wall_a
+from . import details, wall_a, common
 
 from .wall_a import outside as outside
 
@@ -32,7 +32,7 @@ def make_part(height: mm) -> cq.Solid:
     p = p.faces(">Z").workplane(centerOption="CenterOfBoundBox")
     p = p.placeSketch(half_s).cutBlind(-18 / 2)
 
-    return p.findSolid()
+    return common.recenter(p.findSolid())
 
 
 def make_cnc(height: mm):
